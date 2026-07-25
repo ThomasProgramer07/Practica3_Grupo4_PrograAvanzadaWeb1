@@ -7,6 +7,7 @@ using WebAvanzadaIICuatrimestre.BLL.Services.Votante;
 using WebAvanzadaIICuatrimestre.DAL.Data;
 using WebAvanzadaIICuatrimestre.DAL.Repositorios.Generico;
 using WebAvanzadaIICuatrimestre.Middleware;
+using WebAvanzadaIICuatrimestre.BLL.Services.Votacion;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -29,6 +30,20 @@ builder.Services.AddScoped<IVotanteServicio, VotanteServicio>();
 
 // Servicios Terceros
 builder.Services.AddAutoMapper(cfg => { }, typeof(MapeoClases)); // Directamente desde la documentaci�n
+
+//Servicios de Votacion
+builder.Services.AddScoped<IVotacionServicio, VotacionServicio>();
+
+builder.Services.AddHttpClient("Api", client =>
+{
+    client.BaseAddress = new Uri("https://localhost:7252/"); // el puerto de TU API
+})
+// Solo para desarrollo: aceptar el certificado autofirmado de localhost
+.ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler
+{
+    ServerCertificateCustomValidationCallback =
+        HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
+});
 
 
 
