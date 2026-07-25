@@ -1,0 +1,61 @@
+@using WebAvanzadaIICuatrimestre.BLL.Dtos;
+@model List<VotanteDto>
+@{
+    ViewData["Title"] = "Mantenimiento de Votante";
+}
+
+<link rel="stylesheet" href="~/css/Votante.css" asp-append-version="true" />
+
+<div class="Votante-page">
+
+    <div class="page-header">
+        <div class="page-header-content">
+            <div>
+                <h1 class="page-title">
+                    <i class="bi bi-people-fill"></i> Votante
+                </h1>
+                <p class="page-subtitle">Gestión de Votantes</p>
+            </div>
+            <button type="button" class="btn btn-crear" data-bs-toggle="modal" data-bs-target="#modalCrearVotante">
+                <i class="bi bi-plus-lg"></i> Nuevo Votante
+            </button>
+        </div>
+    </div>
+
+    <div class="table-card">
+        <div class="table-card-header">
+            <h2 class="table-card-title">
+                <i class="bi bi-list-ul"></i> Lista de Votantes
+            </h2>
+        </div>
+        <div class="table-responsive">
+            <table id="tblVotante" class="table table-Votante" style="width:100%">
+                <thead>
+                    <tr>
+                        <th style="width:6%"><div class="th-content"><i class="bi bi-hash"></i> Id</div></th>
+                        <th><div class="th-content"><i class="bi bi-card-text"></i> Identificación</div></th>
+                        <th><div class="th-content"><i class="bi bi-person"></i> Nombre</div></th>
+                        <th style="width:8%"><div class="th-content"><i class="bi bi-calendar"></i> Edad</div></th>
+                        <th><div class="th-content"><i class="bi bi-person-badge"></i> Apellido 1</div></th>
+                        <th><div class="th-content"><i class="bi bi-person-badge"></i> Apellido 2</div></th>
+                        <th style="width:8%"><div class="th-content"><i class="bi bi-person"></i> Sexo</div></th>
+                        <th style="width:10%"><div class="th-content"><i class="bi bi-toggle-on"></i> Estado</div></th>
+                        <th><div class="th-content"><i class="bi bi-telephone"></i> Teléfonos</div></th>
+                        <th><div class="th-content"><i class="bi bi-envelope"></i> Correos electrónicos</div></th>
+                        <th style="width:14%"><div class="th-content"><i class="bi bi-gear"></i> Acciones</div></th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+
+    @await Html.PartialAsync("_Editar")
+    @await Html.PartialAsync("_Crear")
+
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script src="~/js/Votante.js" asp-append-version="true"></script>
+}

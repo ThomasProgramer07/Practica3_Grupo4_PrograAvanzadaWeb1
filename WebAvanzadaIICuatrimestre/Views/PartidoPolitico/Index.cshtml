@@ -1,0 +1,57 @@
+@using WebAvanzadaIICuatrimestre.BLL.Dtos;
+@model List<PartidoPoliticoDto>
+@{
+    ViewData["Title"] = "Mantenimiento de Partidos Políticos";
+}
+
+<link rel="stylesheet" href="~/css/representanteLegal.css" asp-append-version="true" />
+
+<div class="representanteLegal-page">
+
+    <div class="page-header">
+        <div class="page-header-content">
+            <div>
+                <h1 class="page-title">
+                    <i class="bi bi-flag-fill"></i> Partidos Políticos
+                </h1>
+                <p class="page-subtitle">Gestión de partidos políticos</p>
+            </div>
+            <button type="button" class="btn btn-crear" data-bs-toggle="modal" data-bs-target="#modalCrearPartidoPolitico">
+                <i class="bi bi-plus-lg"></i> Nuevo Partido Político
+            </button>
+        </div>
+    </div>
+
+    <div class="table-card">
+        <div class="table-card-header">
+            <h2 class="table-card-title">
+                <i class="bi bi-list-ul"></i> Lista de Partidos Políticos
+            </h2>
+        </div>
+        <div class="table-responsive">
+            <table id="tblPartidoPolitico" class="table table-representanteLegal" style="width:100%">
+                <thead>
+                    <tr>
+                        <th style="width:6%"><div class="th-content"><i class="bi bi-hash"></i> Id</div></th>
+                        <th><div class="th-content"><i class="bi bi-card-text"></i> Identificación</div></th>
+                        <th><div class="th-content"><i class="bi bi-tag"></i> Nombre</div></th>
+                        <th><div class="th-content"><i class="bi bi-bookmark"></i> Sigla</div></th>
+                        <th style="width:10%"><div class="th-content"><i class="bi bi-toggle-on"></i> Estado</div></th>
+                        <th><div class="th-content"><i class="bi bi-person"></i> Representante Legal</div></th>
+                        <th style="width:14%"><div class="th-content"><i class="bi bi-gear"></i> Acciones</div></th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+
+    @await Html.PartialAsync("_Editar")
+    @await Html.PartialAsync("_Create")
+
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script src="~/js/partidoPolitico.js" asp-append-version="true"></script>
+}

@@ -1,0 +1,108 @@
+@model WebAvanzadaIICuatrimestre.BLL.Dtos.VotanteDto
+
+<div class="modal fade" id="modalEditarVotante" tabindex="-1" aria-labelledby="labelModalEditarVotante" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content border-0 shadow">
+
+            <div class="modal-header text-white" style="background: linear-gradient(135deg, #2563eb 0%, #4f46e5 100%);">
+                <h5 class="modal-title fw-semibold" id="labelModalEditarVotante">
+                    <i class="bi bi-pencil-square me-2"></i>Editar Votante
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <div class="modal-body p-4">
+                <form id="formEditarVotante" asp-action="UpdateVotante" asp-controller="Votante" method="post" class="row g-3">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" asp-for="Id" />
+
+                    <div class="col-md-6">
+                        <label asp-for="Identificacion" class="form-label fw-medium">
+                            <i class="bi bi-card-text text-primary me-1"></i>Identificación
+                        </label>
+                        <input asp-for="Identificacion" class="form-control" />
+                        <span asp-validation-for="Identificacion" class="text-danger small"></span>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label asp-for="Sexo" class="form-label fw-medium">
+                            <i class="bi bi-gender-ambiguous text-primary me-1"></i>Sexo
+                        </label>
+                        <select asp-for="Sexo" class="form-select">
+                            <option value="">-- Seleccione --</option>
+                            <option value="1">Hombre</option>
+                            <option value="2">Mujer</option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label asp-for="Nombre" class="form-label fw-medium">
+                            <i class="bi bi-person text-primary me-1"></i>Nombre
+                        </label>
+                        <input asp-for="Nombre" class="form-control" />
+                        <span asp-validation-for="Nombre" class="text-danger small"></span>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label asp-for="Edad" class="form-label fw-medium">
+                            <i class="bi bi-calendar text-primary me-1"></i>Edad
+                        </label>
+                        <input asp-for="Edad" type="number" min="0" class="form-control" />
+                        <span asp-validation-for="Edad" class="text-danger small"></span>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label asp-for="Apellido1" class="form-label fw-medium">
+                            <i class="bi bi-person-badge text-primary me-1"></i>Apellido 1
+                        </label>
+                        <input asp-for="Apellido1" class="form-control" />
+                        <span asp-validation-for="Apellido1" class="text-danger small"></span>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label asp-for="Apellido2" class="form-label fw-medium">
+                            <i class="bi bi-person-badge text-primary me-1"></i>Apellido 2
+                        </label>
+                        <input asp-for="Apellido2" class="form-control" />
+                        <span asp-validation-for="Apellido2" class="text-danger small"></span>
+                    </div>
+
+                    <div class="col-12">
+                        <label class="form-label fw-medium">
+                            <i class="bi bi-telephone text-primary me-1"></i>Teléfonos
+                        </label>
+                        <div id="telefonosEditar"></div>
+                        <button type="button" class="btn btn-sm btn-outline-primary" id="btnAgregarTelefonoEditar">
+                            <i class="bi bi-plus-lg"></i> Agregar teléfono
+                        </button>
+                    </div>
+
+                    <div class="col-12">
+                        <label class="form-label fw-medium">
+                            <i class="bi bi-envelope text-primary me-1"></i>Correos electrónicos
+                        </label>
+                        <div id="correosEditar"></div>
+                        <button type="button" class="btn btn-sm btn-outline-primary" id="btnAgregarCorreoEditar">
+                            <i class="bi bi-plus-lg"></i> Agregar correo
+                        </button>
+                    </div>
+
+                </form>
+            </div>
+
+            <div class="modal-footer border-top px-4 py-3">
+                <button type="button" class="btn btn-light border" data-bs-dismiss="modal">
+                    <i class="bi bi-x-lg me-1"></i>Cerrar
+                </button>
+                <button type="button" class="btn btn-primary" id="btnEditarVotante">
+                    <i class="bi bi-floppy me-1"></i>Guardar cambios
+                </button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

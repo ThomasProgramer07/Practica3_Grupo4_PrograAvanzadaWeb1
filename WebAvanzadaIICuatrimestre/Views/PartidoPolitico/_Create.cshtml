@@ -1,0 +1,85 @@
+@model WebAvanzadaIICuatrimestre.Models.PartidoPoliticoViewModel
+@using WebAvanzadaIICuatrimestre.BLL.Dtos
+
+<div class="modal fade" id="modalCrearPartidoPolitico" tabindex="-1" aria-labelledby="labelModalCrearPartidoPolitico" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow">
+
+            <div class="modal-header text-white" style="background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);">
+                <h5 class="modal-title fw-semibold" id="labelModalCrearPartidoPolitico">
+                    <i class="bi bi-flag-fill me-2"></i>Nuevo Partido Político
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <div class="modal-body p-4">
+                <form id="formCrearPartidoPolitico" asp-action="CreatePartidoPolitico" asp-controller="PartidoPolitico" method="post" class="row g-3">
+                    @Html.AntiForgeryToken()
+
+                    <div class="col-md-6">
+                        <label class="form-label fw-medium">
+                            <i class="bi bi-card-text text-primary me-1"></i>Identificación
+                        </label>
+                        <input name="Identificacion" id="crear_Identificacion" class="form-control" placeholder="Ej: PP-001" />
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label fw-medium">
+                            <i class="bi bi-tag text-primary me-1"></i>Nombre
+                        </label>
+                        <input name="Nombre" id="crear_Nombre" class="form-control" placeholder="Nombre del partido" />
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label fw-medium">
+                            <i class="bi bi-bookmark text-primary me-1"></i>Sigla
+                        </label>
+                        <input name="Sigla" id="crear_Sigla" class="form-control" placeholder="Ej: PLN" />
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label fw-medium">
+                            <i class="bi bi-toggle-on text-primary me-1"></i>Estado
+                        </label>
+                        <select name="Estado" id="crear_Estado" class="form-select">
+                            <option value="">-- Seleccione --</option>
+                            <option value="1">Activo</option>
+                            <option value="0">Inactivo</option>
+                        </select>
+                    </div>
+
+                    <div class="col-12">
+                        <label class="form-label fw-medium">
+                            <i class="bi bi-person text-primary me-1"></i>Representante Legal
+                        </label>
+                        <select name="FkrepresentanteLegal" id="crear_FkrepresentanteLegal" class="form-select">
+                            <option value="">-- Seleccione representante --</option>
+                            @if (ViewBag.RepresentanteLegals != null)
+                            {
+                                foreach (var d in ViewBag.RepresentanteLegals)
+                                {
+                                    <option value="@d.Id">@d.Nombre @d.Apellido1</option>
+                                }
+                            }
+                        </select>
+                    </div>
+
+                </form>
+            </div>
+
+            <div class="modal-footer border-top px-4 py-3">
+                <button type="button" class="btn btn-light border" data-bs-dismiss="modal">
+                    <i class="bi bi-x-lg me-1"></i>Cerrar
+                </button>
+                <button type="button" class="btn btn-primary" id="btnGuardarPartidoPolitico">
+                    <i class="bi bi-floppy me-1"></i>Guardar
+                </button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

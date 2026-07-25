@@ -1,0 +1,60 @@
+@using WebAvanzadaIICuatrimestre.BLL.Dtos;
+@model List<RepresentanteLegalDto>
+@{
+    ViewData["Title"] = "Mantenimiento de Representante Legal";
+}
+
+<link rel="stylesheet" href="~/css/representanteLegal.css" asp-append-version="true" />
+
+<div class="representanteLegal-page">
+
+    <div class="page-header">
+        <div class="page-header-content">
+            <div>
+                <h1 class="page-title">
+                    <i class="bi bi-people-fill"></i> Representante Legal
+                </h1>
+                <p class="page-subtitle">Gestión de representantes legales</p>
+            </div>
+            <button type="button" class="btn btn-crear" data-bs-toggle="modal" data-bs-target="#modalCrearRepresentanteLegal">
+                <i class="bi bi-plus-lg"></i> Nuevo Representante Legal
+            </button>
+        </div>
+    </div>
+
+    <div class="table-card">
+        <div class="table-card-header">
+            <h2 class="table-card-title">
+                <i class="bi bi-list-ul"></i> Lista de Representante Legal
+            </h2>
+        </div>
+        <div class="table-responsive">
+            <table id="tblRepresentanteLegal" class="table table-representanteLegal" style="width:100%">
+                <thead>
+                    <tr>
+                        <th style="width:6%"><div class="th-content"><i class="bi bi-hash"></i> Id</div></th>
+                        <th><div class="th-content"><i class="bi bi-card-text"></i> Identificación</div></th>
+                        <th><div class="th-content"><i class="bi bi-person"></i> Nombre</div></th>
+                        <th style="width:8%"><div class="th-content"><i class="bi bi-calendar"></i> Edad</div></th>
+                        <th><div class="th-content"><i class="bi bi-person-badge"></i> Apellido 1</div></th>
+                        <th><div class="th-content"><i class="bi bi-person-badge"></i> Apellido 2</div></th>
+                        <th style="width:8%"><div class="th-content"><i class="bi bi-person"></i> Sexo</div></th>
+                        <th><div class="th-content"><i class="bi bi-telephone"></i> Teléfonos</div></th>
+                        <th><div class="th-content"><i class="bi bi-envelope"></i> Correos electrónicos</div></th>
+                        <th style="width:14%"><div class="th-content"><i class="bi bi-gear"></i> Acciones</div></th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+
+    @await Html.PartialAsync("_Editar")
+    @await Html.PartialAsync("_Crear")
+
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script src="~/js/representanteLegal.js" asp-append-version="true"></script>
+}
