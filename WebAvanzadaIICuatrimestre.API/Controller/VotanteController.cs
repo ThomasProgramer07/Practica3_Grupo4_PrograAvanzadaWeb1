@@ -17,45 +17,22 @@ namespace WebAvanzadaIICuatrimestre.API.Controllers
 
         [HttpGet]
         public async Task<IActionResult> GetTodos()
-        {
-            var respuesta = await _votanteServicio.GetVotantes();
-            return Ok(respuesta);
-        }
+            => Ok(await _votanteServicio.GetVotantes());
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetPorId(int id)
-        {
-            var respuesta = await _votanteServicio.GetVotanteById(id);
-            if (!respuesta.esCorrecto)
-                return StatusCode(respuesta.codigo, respuesta);
-            return Ok(respuesta);
-        }
+            => Ok(await _votanteServicio.GetVotanteById(id));
 
         [HttpPost]
         public async Task<IActionResult> Crear([FromBody] VotanteDto votante)
-        {
-            var respuesta = await _votanteServicio.CreateVotante(votante);
-            if (!respuesta.esCorrecto)
-                return StatusCode(respuesta.codigo, respuesta);
-            return Ok(respuesta);
-        }
+            => Ok(await _votanteServicio.CreateVotante(votante));
 
         [HttpPut]
         public async Task<IActionResult> Actualizar([FromBody] VotanteDto votante)
-        {
-            var respuesta = await _votanteServicio.UpdateVotante(votante);
-            if (!respuesta.esCorrecto)
-                return StatusCode(respuesta.codigo, respuesta);
-            return Ok(respuesta);
-        }
+            => Ok(await _votanteServicio.UpdateVotante(votante));
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> Eliminar(int id)
-        {
-            var respuesta = await _votanteServicio.DeleteVotante(id);
-            if (!respuesta.esCorrecto)
-                return StatusCode(respuesta.codigo, respuesta);
-            return Ok(respuesta);
-        }
+            => Ok(await _votanteServicio.DeleteVotante(id));
     }
 }

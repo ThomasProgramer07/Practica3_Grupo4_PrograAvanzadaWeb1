@@ -34,3 +34,14 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.MapControllers();
 app.Run();
+
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<WebAvanzadaIICuatrimestre.DAL.Data.ApplicationDbContext>();
+    var conn = db.Database.GetDbConnection();
+    var csb = new Microsoft.Data.Sqlite.SqliteConnectionStringBuilder(conn.ConnectionString);
+    Console.WriteLine("=====================================================");
+    Console.WriteLine($"[DB] Ruta ABSOLUTA que abre el API: {Path.GetFullPath(csb.DataSource)}");
+    Console.WriteLine($"[DB] Partidos en ESA base: {db.PartidoPoliticos.Count()}");
+    Console.WriteLine("=====================================================");
+}
