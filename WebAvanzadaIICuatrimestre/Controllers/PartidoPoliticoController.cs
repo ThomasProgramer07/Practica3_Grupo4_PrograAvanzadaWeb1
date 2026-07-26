@@ -1,93 +1,57 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using System.Collections.Generic;
-using System.Linq;
+using System.Net.Http.Json;
 using WebAvanzadaIICuatrimestre.BLL.Dtos;
-using WebAvanzadaIICuatrimestre.BLL.Services.PartidoPolitico;
-using WebAvanzadaIICuatrimestre.BLL.Services.RepresentanteLegal;
-using WebAvanzadaIICuatrimestre.Models;
 
 namespace WebAvanzadaIICuatrimestre.Controllers
 {
     public class PartidoPoliticoController : Controller
     {
-        private readonly IPartidoPoliticoServicio _partidoPoliticoServicio;
-        private readonly IRepresentanteLegalServicio _representanteLegalServicio;
+        private readonly IHttpClientFactory _httpClientFactory;
 
-        public PartidoPoliticoController(IPartidoPoliticoServicio partidoPoliticoServicio, IRepresentanteLegalServicio representanteLegalServicio)
+        public PartidoPoliticoController(IHttpClientFactory httpClientFactory)
         {
-            _partidoPoliticoServicio = partidoPoliticoServicio;
-            _representanteLegalServicio = representanteLegalServicio;
-        }       
+            _httpClientFactory = httpClientFactory;
+        }
 
-        /*public async Task<IActionResult> Index()
+        private HttpClient Api => _httpClientFactory.CreateClient("Api");
+
+        public async Task<IActionResult> Index()
         {
-            var vm = new PartidoPoliticoViewModel
-            {
-                PartidoPolitico = new PartidoPoliticoDto()
-            };
-
-            var resp = await _representanteLegalServicio.GetRepresentanteLegals();
-            var representanteLegals = resp.Dato ?? new List<RepresentanteLegalDto>();
-
-            vm.RepresentanteLegals = representanteLegals
-                .Select(d => new SelectListItem { Value = d.Id.ToString(), Text = d.Nombre })
-                .ToList();
-
-            return View(vm);
-        }-*/       
-
-        public async Task<IActionResult> Index() //Que puede llegar a ser m'as facil de entender e implementar, aunque el ViewModel es una buena práctica para mantener la lógica de presentación separada de la lógica de negocio.
-        {
-            var resp = await _representanteLegalServicio.GetRepresentanteLegals(); 
-            ViewBag.RepresentanteLegals = resp.Dato;
+            var resp = await Api.GetFromJsonAsync<Respuesta<List<RepresentanteLegalDto>>>("api/RepresentanteLegal");
+            ViewBag.RepresentanteLegals = resp?.Dato;
             return View();
         }
-        //Separacion de responsabilidad, capacidad para darle mantenimiento al codigo facilmente y claridad de lo que se hace
 
         public async Task<IActionResult> GetPartidoPoliticos()
         {
-            var respuesta = await _partidoPoliticoServicio.GetPartidoPoliticos();
-            return Json(respuesta);
-        }
-
-        public async Task<IActionResult> CreatePartidoPolitico(PartidoPoliticoDto partidoPolitico)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-            var respuesta = await _partidoPoliticoServicio.CreatePartidoPolitico(partidoPolitico);
+            var respuesta = await Api.GetFromJsonAsync<Respuesta<List<PartidoPoliticoDto>>>("api/PartidoPolitico");
             return Json(respuesta);
         }
 
         public async Task<IActionResult> GetPartidoPoliticoById(int id)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-            var respuesta = await _partidoPoliticoServicio.GetPartidoPoliticoById(id);
+            var respuesta = await Api.GetFromJsonAsync<Respuesta<PartidoPoliticoDto>>($"api/PartidoPolitico/{id}");
+            return Json(respuesta);
+        }
+
+        public async Task<IActionResult> CreatePartidoPolitico(PartidoPoliticoDto partidoPolitico)
+        {
+            var http = await Api.PostAsJsonAsync("api/PartidoPolitico", partidoPolitico);
+            var respuesta = await http.Content.ReadFromJsonAsync<Respuesta<PartidoPoliticoDto>>();
             return Json(respuesta);
         }
 
         public async Task<IActionResult> UpdatePartidoPolitico(PartidoPoliticoDto partidoPolitico)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-            var respuesta = await _partidoPoliticoServicio.UpdatePartidoPolitico(partidoPolitico);
+            var http = await Api.PutAsJsonAsync("api/PartidoPolitico", partidoPolitico);
+            var respuesta = await http.Content.ReadFromJsonAsync<Respuesta<PartidoPoliticoDto>>();
             return Json(respuesta);
         }
 
         public async Task<IActionResult> DeletePartidoPolitico(int id)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-            var respuesta = await _partidoPoliticoServicio.DeletePartidoPolitico(id);
+            var http = await Api.DeleteAsync($"api/PartidoPolitico/{id}");
+            var respuesta = await http.Content.ReadFromJsonAsync<Respuesta<PartidoPoliticoDto>>();
             return Json(respuesta);
         }
     }

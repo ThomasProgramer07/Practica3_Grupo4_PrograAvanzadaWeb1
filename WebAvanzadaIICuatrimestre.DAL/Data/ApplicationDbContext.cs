@@ -18,6 +18,8 @@ public partial class ApplicationDbContext : DbContext
 
     public virtual DbSet<PartidoPolitico> PartidoPoliticos { get; set; }
 
+    public virtual DbSet<Voto> Votos { get; set; }
+
     public virtual DbSet<RepresentanteLegal> RepresentanteLegales { get; set; }
 
     public virtual DbSet<Telefono> Telefonos { get; set; }
@@ -48,6 +50,17 @@ public partial class ApplicationDbContext : DbContext
             entity.Property(e => e.FkrepresentanteLegal).HasColumnName("FKREPRESENTANTELEGAL");
 
             entity.HasOne(d => d.FkrepresentanteLegalNavigation).WithMany(p => p.PartidosPoliticos).HasForeignKey(d => d.FkrepresentanteLegal);
+        });
+
+        modelBuilder.Entity<Voto>(entity =>
+        {
+            entity.ToTable("Voto");
+            entity.Property(e => e.Id).HasColumnName("Id");
+            entity.Property(e => e.Fkvotante).HasColumnName("FKVOTANTE");
+            entity.Property(e => e.FkpartidoPolitico).HasColumnName("FKPARTIDOPOLITICO");
+
+            entity.HasOne(d => d.FkvotanteNavigation).WithMany().HasForeignKey(d => d.Fkvotante);
+            entity.HasOne(d => d.FkpartidoPoliticoNavigation).WithMany().HasForeignKey(d => d.FkpartidoPolitico);
         });
 
         modelBuilder.Entity<RepresentanteLegal>(entity =>

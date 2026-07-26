@@ -13,7 +13,7 @@ public partial class Correo
     [Column("FKRepresentanteLegal")]  // Specify exact DB column name
     public int FkrepresentanteLegal { get; set; }
 
-    public int Fkvotante { get; set; }
+    public int? Fkvotante { get; set; }
 
     public virtual RepresentanteLegal? FkrepresentanteLegalNavigation { get; set; }
 

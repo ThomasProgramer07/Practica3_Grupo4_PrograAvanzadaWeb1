@@ -1,75 +1,53 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using System.Net.Http.Json;
 using WebAvanzadaIICuatrimestre.BLL.Dtos;
-using WebAvanzadaIICuatrimestre.BLL.Services.RepresentanteLegal;
 
 namespace WebAvanzadaIICuatrimestre.Controllers
 {
     public class RepresentanteLegalController : Controller
     {
-        private readonly IRepresentanteLegalServicio _representanteLegalServicio;
+        private readonly IHttpClientFactory _httpClientFactory;
 
-
-        public RepresentanteLegalController(IRepresentanteLegalServicio representanteLegalServicio)
+        public RepresentanteLegalController(IHttpClientFactory httpClientFactory)
         {
-            _representanteLegalServicio = representanteLegalServicio;
+            _httpClientFactory = httpClientFactory;
         }
 
-        //Vamos a trabajrForma incorrecta segun la IA, se recomienda utilizar un ViewModel o DTO para pasar la informacion necesaria a la vista, en lugar de cargar la informacion directamente en el controlador y pasarla a la vista a través de ViewBag o ViewData, esto para mantener una buena separacion de responsabilidades y evitar que el controlador tenga demasiada logica de negocio.
-        public IActionResult Index() //Se puede llegar a cargar informacion necesario para la vista, como una lista de representanteLegals, etc. utilizando el servicio de representanteLegal para obtener los datos necesarios y pasarlos a la vista a través de un modelo o ViewBag.
-        {
-            //ViewBag.RepresentanteLegals = _representanteLegalServicio.GetAllRepresentanteLegals(); // Ejemplo de carga de datos para la vista, se puede utilizar un modelo o ViewBag para pasar los datos a la vista.
+        private HttpClient Api => _httpClientFactory.CreateClient("Api");
 
-            //Crear un DTO  o ViewModel para la vista, que contenga la informacion necesaria para mostrar en la vista, como una lista de representanteLegals, etc. y pasar ese DTO o ViewModel a la vista.
-            return View();
-        }
+        public IActionResult Index() => View();
 
-        public async Task<IActionResult> GetRepresentanteLegals() // Metodos pequeños, el controlador no sabe respuesta de negocio, solo sabe que tiene que llamar al servicio y devolver la respuesta, la logica de negocio se encuentra en el servicio, esto para mantener una buena separacion de responsabilidades y evitar que el controlador tenga demasiada logica de negocio.
+        public async Task<IActionResult> GetRepresentanteLegals()
         {
-            var respuesta = await _representanteLegalServicio.GetRepresentanteLegals();
-            return Json(respuesta);
-        }
-
-        public async Task<IActionResult> CreateRepresentanteLegal(RepresentanteLegalDto representanteLegal)// Model Binding, reicibir el objeto completo
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-            var respuesta = await _representanteLegalServicio.CreateRepresentanteLegal(representanteLegal);
+            var respuesta = await Api.GetFromJsonAsync<Respuesta<List<RepresentanteLegalDto>>>("api/RepresentanteLegal");
             return Json(respuesta);
         }
 
         public async Task<IActionResult> GetRepresentanteLegalById(int id)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-            var respuesta = await _representanteLegalServicio.GetRepresentanteLegalById(id);
+            var respuesta = await Api.GetFromJsonAsync<Respuesta<RepresentanteLegalDto>>($"api/RepresentanteLegal/{id}");
             return Json(respuesta);
         }
 
-        public async Task<IActionResult> UpdateRepresentanteLegal(RepresentanteLegalDto representanteLegal) //nombres Programa con IA
+        public async Task<IActionResult> CreateRepresentanteLegal(RepresentanteLegalDto representanteLegal)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-            var respuesta = await _representanteLegalServicio.UpdateRepresentanteLegal(representanteLegal); //nombres Programa con IA
+            var http = await Api.PostAsJsonAsync("api/RepresentanteLegal", representanteLegal);
+            var respuesta = await http.Content.ReadFromJsonAsync<Respuesta<RepresentanteLegalDto>>();
+            return Json(respuesta);
+        }
+
+        public async Task<IActionResult> UpdateRepresentanteLegal(RepresentanteLegalDto representanteLegal)
+        {
+            var http = await Api.PutAsJsonAsync("api/RepresentanteLegal", representanteLegal);
+            var respuesta = await http.Content.ReadFromJsonAsync<Respuesta<RepresentanteLegalDto>>();
             return Json(respuesta);
         }
 
         public async Task<IActionResult> DeleteRepresentanteLegal(int id)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-            var respuesta = await _representanteLegalServicio.DeleteRepresentanteLegal(id);
+            var http = await Api.DeleteAsync($"api/RepresentanteLegal/{id}");
+            var respuesta = await http.Content.ReadFromJsonAsync<Respuesta<RepresentanteLegalDto>>();
             return Json(respuesta);
         }
-
-
-        //Por que lo hago así? Por la facilidad de crear la vista y mostrar la informacion, pero no es la forma recomendada por la IA, se recomienda utilizar un ViewModel o DTO para pasar la informacion necesaria a la vista, en lugar de cargar la informacion directamente en el controlador y pasarla a la vista a través de ViewBag o ViewData, esto para mantener una buena separacion de responsabilidades y evitar que el controlador tenga demasiada logica de negocio.
     }
 }

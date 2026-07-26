@@ -74,7 +74,7 @@ namespace WebAvanzadaIICuatrimestre.BLL.Services.RepresentanteLegal
         public async Task<Respuesta<RepresentanteLegalDto?>> GetRepresentanteLegalById(int id)
         {
             var respuesta = new Respuesta<RepresentanteLegalDto?>();
-            var entity = await _repositorioGenerico.ObtenerPorIdAsync(id, asNoTracking: true, d => d.PartidosPoliticos, d => d.Telefonos, d => d.Correos);
+            var entity = await _repositorioGenerico.ObtenerPorIdAsync(id, asNoTracking: true,d => d.Telefonos, d => d.Correos);
             if (entity == null)
             {
                 respuesta.esCorrecto = false;
@@ -91,7 +91,7 @@ namespace WebAvanzadaIICuatrimestre.BLL.Services.RepresentanteLegal
         public async Task<Respuesta<List<RepresentanteLegalDto>>> GetRepresentanteLegals()
         {
             var respuesta = new Respuesta<List<RepresentanteLegalDto>>();
-            var list = await _repositorioGenerico.ObtenerTodosAsync(asNoTracking: true, d => d.PartidosPoliticos, d => d.Telefonos, d => d.Correos);
+            var list = await _repositorioGenerico.ObtenerTodosAsync(asNoTracking: true,d => d.Telefonos, d => d.Correos);
             respuesta.Dato = _mapper.Map<List<RepresentanteLegalDto>>(list);
             return respuesta;
         }
