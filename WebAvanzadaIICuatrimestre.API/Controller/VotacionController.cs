@@ -1,26 +1,43 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using System.Text.Json;
 using WebAvanzadaIICuatrimestre.BLL.Dtos;
-using WebAvanzadaIICuatrimestre.BLL.Services.Votacion;
 
-namespace WebAvanzadaIICuatrimestre.API.Controllers
+namespace WebAvanzadaIICuatrimestre.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class VotacionController : ControllerBase
+    public class VotacionController : Controller
     {
-        private readonly IVotacionServicio _votacionServicio;
+        private readonly HttpClient _httpClient;
 
-        public VotacionController(IVotacionServicio votacionServicio)
+        public VotacionController()
         {
-            _votacionServicio = votacionServicio;
+            _httpClient = new HttpClient
+            {
+                BaseAddress = new Uri("http://localhost:5063/") // URL exacta de tu API
+            };
         }
 
-        [HttpPost("votar")]
-        public async Task<IActionResult> Votar([FromBody] VotoDto voto)
-            => Ok(await _votacionServicio.RegistrarVoto(voto));
-
-        [HttpGet("resultados")]
+        [HttpGet]
         public async Task<IActionResult> Resultados()
-            => Ok(await _votacionServicio.GetResultados());
+        {
+            var response = await _httpClient.GetAsync("api/Votacion/resultados");
+
+            if (response.IsSuccessStatusCode)
+            {
+                var content = await response.Content.ReadAsStringAsync();
+                
+                // Mapea la respuesta genérica de la API (Respuesta.cs)
+                using var doc = JsonDocument.Parse(content);
+                var root = doc.RootElement;
+                
+                if (root.TryGetProperty("dato", out var datoElement))
+                {
+                    var opciones = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+                    var resultados = JsonSerializer.Deserialize<List<ResultadoDto>>(datoElement.GetRawText(), opciones);
+                    return View(resultados ?? new List<ResultadoDto>());
+                }
+            }
+
+            return View(new List<ResultadoDto>());
+        }
     }
 }

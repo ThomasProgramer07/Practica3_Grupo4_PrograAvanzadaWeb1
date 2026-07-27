@@ -20,7 +20,6 @@ builder.Services.AddScoped<IVotacionServicio, VotacionServicio>();
 builder.Services.AddScoped<IPartidoPoliticoServicio, PartidoPoliticoServicio>();
 builder.Services.AddScoped<IRepresentanteLegalServicio, RepresentanteLegalServicio>();
 builder.Services.AddScoped<IVotanteServicio, VotanteServicio>();
-builder.Services.AddScoped<IVotacionServicio, VotacionServicio>();
 builder.Services.AddAutoMapper(cfg => { }, typeof(WebAvanzadaIICuatrimestre.BLL.MapeoClases));
 
 var app = builder.Build();
@@ -28,16 +27,11 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
-    app.MapScalarApiReference();   // interfaz de Scalar para probar los endpoints
-}
-
-app.UseHttpsRedirection();
-app.MapControllers();
-app.Run();
+    app.MapScalarApiReference();   
 
 using (var scope = app.Services.CreateScope())
 {
-    var db = scope.ServiceProvider.GetRequiredService<WebAvanzadaIICuatrimestre.DAL.Data.ApplicationDbContext>();
+    var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
     var conn = db.Database.GetDbConnection();
     var csb = new Microsoft.Data.Sqlite.SqliteConnectionStringBuilder(conn.ConnectionString);
     Console.WriteLine("=====================================================");
@@ -49,3 +43,4 @@ using (var scope = app.Services.CreateScope())
 app.UseHttpsRedirection();
 app.MapControllers();
 app.Run();
+}
