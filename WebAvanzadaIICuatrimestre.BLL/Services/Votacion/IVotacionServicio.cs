@@ -1,4 +1,6 @@
-﻿using WebAvanzadaIICuatrimestre.BLL.Dtos;
+﻿namespace WebAvanzadaIICuatrimestre.BLL.Services.Votacion;
+
+using WebAvanzadaIICuatrimestre.BLL.Dtos;
 
 public interface IVotacionServicio
 {
