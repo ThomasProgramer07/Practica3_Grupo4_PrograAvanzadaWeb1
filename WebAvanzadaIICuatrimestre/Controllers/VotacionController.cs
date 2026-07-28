@@ -35,6 +35,15 @@ namespace WebAvanzadaIICuatrimestre.Controllers
             }
 
             var http = await Api.PostAsJsonAsync("api/Votacion/votar", voto);
+            if (!http.IsSuccessStatusCode)
+            {
+                return Json(new Respuesta<VotoDto>
+                {
+                    esCorrecto = false,
+                    mensaje = $"Error al procesar el voto: {http.StatusCode}",
+                    codigo = (int)http.StatusCode
+                });
+            }
             var respuesta = await http.Content.ReadFromJsonAsync<Respuesta<VotoDto>>();
             return Json(respuesta);
         }

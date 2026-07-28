@@ -8,7 +8,7 @@ builder.Services.AddControllersWithViews();
 // El MVC ya NO abre la base de datos, consume el API por HTTP
 builder.Services.AddHttpClient("Api", client =>
 {
-    client.BaseAddress = new Uri("https://localhost:7252/"); //  puerto de TU API
+    client.BaseAddress = new Uri("http://localhost:5063/"); // puerto del API
 })
 .ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler
 {

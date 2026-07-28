@@ -1,43 +1,26 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using System.Text.Json;
 using WebAvanzadaIICuatrimestre.BLL.Dtos;
+using WebAvanzadaIICuatrimestre.BLL.Services.Votacion;
 
-namespace WebAvanzadaIICuatrimestre.Controllers
+namespace WebAvanzadaIICuatrimestre.API.Controllers
 {
-    public class VotacionController : Controller
+    [Route("api/[controller]")]
+    [ApiController]
+    public class VotacionController : ControllerBase
     {
-        private readonly HttpClient _httpClient;
+        private readonly IVotacionServicio _votacionServicio;
 
-        public VotacionController()
+        public VotacionController(IVotacionServicio votacionServicio)
         {
-            _httpClient = new HttpClient
-            {
-                BaseAddress = new Uri("http://localhost:5063/") // URL exacta de tu API
-            };
+            _votacionServicio = votacionServicio;
         }
 
-        [HttpGet]
-        public async Task<IActionResult> Resultados()
-        {
-            var response = await _httpClient.GetAsync("api/Votacion/resultados");
+        [HttpPost("votar")]
+        public async Task<IActionResult> Votar([FromBody] VotoDto voto)
+            => Ok(await _votacionServicio.RegistrarVoto(voto));
 
-            if (response.IsSuccessStatusCode)
-            {
-                var content = await response.Content.ReadAsStringAsync();
-                
-                // Mapea la respuesta genérica de la API (Respuesta.cs)
-                using var doc = JsonDocument.Parse(content);
-                var root = doc.RootElement;
-                
-                if (root.TryGetProperty("dato", out var datoElement))
-                {
-                    var opciones = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
-                    var resultados = JsonSerializer.Deserialize<List<ResultadoDto>>(datoElement.GetRawText(), opciones);
-                    return View(resultados ?? new List<ResultadoDto>());
-                }
-            }
-
-            return View(new List<ResultadoDto>());
-        }
+        [HttpGet("resultados")]
+        public async Task<IActionResult> GetResultados()
+            => Ok(await _votacionServicio.GetResultados());
     }
 }
