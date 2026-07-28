@@ -1,4 +1,5 @@
 ﻿namespace WebAvanzadaIICuatrimestre.BLL.Services.Votacion;
+
 using WebAvanzadaIICuatrimestre.BLL.Dtos;
 using WebAvanzadaIICuatrimestre.DAL.Repositorios.Generico;
 
@@ -60,6 +61,7 @@ public class VotacionServicio : IVotacionServicio
             return respuesta;
         }
 
+        respuesta.esCorrecto = true;
         respuesta.mensaje = "Voto registrado correctamente.";
         respuesta.Dato = voto;
         return respuesta;

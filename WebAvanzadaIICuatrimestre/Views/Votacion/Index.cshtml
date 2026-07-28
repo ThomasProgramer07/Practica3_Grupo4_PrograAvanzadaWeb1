@@ -1,0 +1,52 @@
+﻿@{
+    ViewData["Title"] = "Emitir Voto";
+    var partidos = ViewBag.Partidos as List<WebAvanzadaIICuatrimestre.BLL.Dtos.PartidoPoliticoDto> ?? new List<WebAvanzadaIICuatrimestre.BLL.Dtos.PartidoPoliticoDto>();
+}
+
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="mb-0 text-center">Proceso de Votación</h3>
+                </div>
+                <div class="card-body">
+
+                    <form id="formVotacion">
+                        <div class="mb-3">
+                            <label for="identificacion" class="form-label fw-bold">Número de Cédula:</label>
+                            <input type="text" class="form-control" name="Identificacion" id="identificacion" placeholder="Ingrese su cédula" required />
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Seleccione el Partido Político:</label>
+                            @if (partidos.Any())
+                            {
+                                @foreach (var partido in partidos)
+                                {
+                                    <div class="form-check p-2 border rounded mb-2">
+                                        <input class="form-check-input ms-1" type="radio" name="FkpartidoPolitico" id="partido_@partido.Id" value="@partido.Id" required>
+                                        <label class="form-check-label ms-2 fw-bold" for="partido_@partido.Id">
+                                            @partido.Nombre (@partido.Sigla)
+                                        </label>
+                                    </div>
+                                }
+                            }
+                            else
+                            {
+                                <p class="text-danger">No hay partidos políticos registrados en el sistema.</p>
+                            }
+                        </div>
+
+                        <button type="submit" class="btn btn-success w-100 fw-bold">Emitir Voto</button>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/js/votacion.js"></script>
+}

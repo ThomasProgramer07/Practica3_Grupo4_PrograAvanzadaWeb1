@@ -45,3 +45,7 @@ using (var scope = app.Services.CreateScope())
     Console.WriteLine($"[DB] Partidos en ESA base: {db.PartidoPoliticos.Count()}");
     Console.WriteLine("=====================================================");
 }
+
+app.UseHttpsRedirection();
+app.MapControllers();
+app.Run();
